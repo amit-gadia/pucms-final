@@ -43,67 +43,28 @@
       </style>
   </head>
   <body>      
-<div class="loader" ><img width="350px" height="350px" src="{{url_for('static', filename='img/Poornima_UniversityLogo.gif')}}"></a>
+<div class="loader" ><img width="350px" height="350px" src="{{url_for('static', filename='img/Poornima_University_Logo.gif')}}"></a>
 </div>
 
     <table class="table table-hover">
         <thead>
           <tr class="navcolor">
-            <th>Name</th>
-            <th style="color:white;">{{dataa[2]}}</th>
-            <th>Registration Number</th>
-            <th style="color:white;">{{dataa[3]}}</th>
-          </tr>
-          <tr class="navcolor">
-            <th>Course</th>
-            <th style="color:white;">{{dataa[0]}}</th>
-            <th>Branch</th>
-            <th style="color:white;">{{dataa[1]}}</th>
-          </tr>
-          <tr class="navcolor">
-            <th></th>
-            <th>Academic Fees</th>
-            <th>Hostel Fees</th>
-            <th>Transport Fees</th>
-            
+            <th>Breakfast</th>
+            <th>Lunch</th>
+            <th>Dinner</th>
           </tr>
         </thead>
         <tbody>
-         
+          {%for i in range(csc)%}
           <tr style="color:white;" class="navcolor">
-            <td style="color:#0f0c0c">Total Fees</td>
-            <td>{{cf}}</td>
-            <td>75000</td>
-            <td></td>
+            <td>{{aaa[i]}}</td>
+            <td>{{aba[i]}}</td>
+            <td>{{aab[i]}}</td>
           </tr>
-          <tr style="color:white;" class="navcolor">
-            <td style="color:#0f0c0c">Submitted Fees</th>
-            <td>{{a}}</th>
-            <td>{{h}}</td>
-            <td>{{t}}</td>
-            
-          </tr>
-          <tr style="color:white;" class="navcolor">
-            <td style="color:#0f0c0c">Due Fees</th>
-            <td>{{cf-a}}</th>
-            <td>{{75000-h}}</td>
-            <td></td>
-        </tr>
+          {%endfor%}
+        </tbody>
+        </table>
         
-        <tr>
-          <td></td>
-          <td><input type="text" class="form-control" name="Registration_Number" id="exampleInputPassword1" placeholder="Registration Number" ></select></td>
-          <td><input type="text" class="form-control" name="Registration_Number" id="exampleInputPassword1" placeholder="Registration Number" ></select></td>
-          <td><input type="text" class="form-control" name="Registration_Number" id="exampleInputPassword1" placeholder="Registration Number" ></select></td>
-          
-          </tr>
-        <tr>
-          <td></td>
-          <td><Button></Button></td>
-          <td><Button></Button></td>
-          <td><Button></Button></td>
-          
-          </tr>
           
         </tbody>
       </table>
@@ -120,6 +81,3 @@
     </script>
     </body>
     </html>
-
-
-    

@@ -17,7 +17,6 @@ def logout():
     session.pop('userid')
     session.pop('user')
     session.pop('userrole')
-    
     return main.login()
 @app.route('/downloadnotice/<file>')
 def down(file):
@@ -30,7 +29,7 @@ class adminnotice:
         return render_template(st,temp="/noticeicon")
     @app.route("/noticeicon")
     def show_noticemain():
-        st="maintemp/"+session['userrole']+"main.html"
+        st="maintemp/"+session['userrole']+"_main.html"
         return render_template("notice/addnotice.html")
     @app.route("/addnewnote",methods=['POST'])
     def add_notice():
@@ -68,35 +67,123 @@ class hostel:
     
     @app.route("/addhmess")
     def addmess():
-        st="maintemp/admin_main.html"
+        st="maintemp/"+session['userrole']+"_main.html"
         return render_template(st,temp="/addmessicon")
     @app.route("/addmessicon")
     def addmessicon():
-        st="maintemp/"+session['userrole']+"main.html"
+        st="maintemp/"+session['userrole']+"_main.html"
         return render_template("facilities/addmess.html")
+    @app.route("/viewmess")
+    def vmess():
+        st="maintemp/admin_main.html"
+        return render_template(st,temp="/viewhmess")
+    @app.route("/viewhmess")
+    def viewmess():
+        sql="select * from mess;"
+        cur.execute(sql)
+        aa=cur.fetchall()
+        print(aa)
+        aaa=aa[0][1].split(',')
+        aba=aa[0][2].split(',')
+        aab=aa[0][3].split(',')
+        csc=0
+        print(len(aab),len(aaa),len(aba))
+        if(len(aab)>len(aaa) and len(aab)>len(aab)):
+            csc=len(aab)
+            print("p")
+        if(len(aaa)>len(aba) and len(aaa)>len(aab)):
+            csc=len(aaa)
+            print("pp")
+        if(len(aba)>len(aaa) and len(aba)>len(aab)):
+            csc=len(aba)
+            print("ppp")
+        if(len(aba)==len(aaa) and len(aba)==len(aab) and len(aab)==len(aaa)):
+            csc=len(aba)
+        
+        print(aaa,aba,aab,csc)
+        return render_template("facilities/viewmess.html",csc=csc,aaa=aaa,aba=aba,aab=aab)
+
     @app.route("/addmessroom",methods=['POST'])
     def admessroom():
         breakfast=request.form['breakfast']
-        print(breakfast.split(','))
         lunch=request.form['lunch']
-        print(lunch.split(','))
         dinner=request.form['dinner']
-        print(dinner.split(','))
+        sql="delete from mess;"
+        cur.execute(sql)
+        sql="insert into mess(breakfast,lunch,dinner) values(%s,%s,%s);"
+        val=(breakfast,lunch,dinner)
+        cur.execute(sql,val)
+        conn.commit()
+        return hostel.viewmess()
+    
+    @app.route("/alloteroom")
+    def allmess():
+        st="maintemp/admin_main.html"
+        return render_template(st,temp="/allotemessicon")
+    @app.route("/allotemessicon")
+    def alloteroom():
+        st="maintemp/"+session['userrole']+"main.html"
         
-        return hostel.addmessicon()
+        sql="SELECT t1.reg_no FROM student t1 LEFT JOIN  hroom t2 on t2.stuid=t1.reg_no WHERE t2.stuid IS NULL;"
+        cur.execute(sql)
+        sti=cur.fetchall()
+        sql="select distinct room_no from hroom where status='no';"
+        cur.execute(sql)
+        st=cur.fetchall()
+        return render_template("facilities/alloteroom.html",lendataBa=len(sti),dataaa=sti,lendataAp=len(st),datapp=st)
+    @app.route("/addingroom",methods=['POST'])
+    def addingroom():
+        stname=request.form['bauthor']
+        rno=request.form['cauthor']
+        sql="update hroom set status='yes',stuid=%s where room_no=%s;"
+        val=(stname,rno)
+        cur.execute(sql,val)
+        conn.commit()
+        return hostel.alloteroom()
+class stu:
+    @app.route("/pinfo")
+    def pinfo():
+        st="maintemp/Student_main.html"
+        return render_template(st,temp="/pinfoi")
+    @app.route("/pinfoi")
+    def pinfoi():
+        st="maintemp/"+session['userrole']+"_main.html"
+        
+        sql="select * from student left join parents ON student.reg_no = parents.stuis where reg_no=%s;"
+        val=(session['userid'],)
+        cur.execute(sql,val)
+        sti=cur.fetchall()
+        a=["id","First Name","Last Name","dob"," p_id","address","city"," state","mob_no"," gender","aadhar","course","branch","bg","reg_no"," ten"," tenb","tw","twb"," dip"," dm","bd"," buc","jy","p","p","p","p","p","p","p","p","p","p","p"]
+        aa=sti[0]
+        bb=list(aa)
+        pi=bb[:4]+bb[5:15]+bb[23:24]
+        pia=["id","First Name","Last Name","Date Of Bith","Address","City"," State","Mobile Number"," Gender","Aadhar No.","Course","Branch","Blood Group","Registration Number","Year"]
+        ai=bb[15:23]
+        pp=bb[26:30]+bb[31:]
+        aia=["10th Board","Percentage/CGPA","12th Board","Percentage/CGPA","Diploma","Percentage/CGPA","Bachelor Degree"," Percentage/CGPA"]
+        ppa=["Father Name","Father Occupation","Mother Name","Mother Occupation","Mobile Number","Passcode","p","p"]
+        return render_template("stu/pinfo.html",lenpi=len(pi),pi=pi,pia=pia,lenaia=len(ai),aia=aia,ai=ai,lenpp=len(pp),ppa=ppa,pp=pp,dataaa=sti,datapp=a)
+   
 class adminacc:
     @app.route("/Accounts")
     def acc():
-        st="maintemp/admin_main.html"
-        return render_template(st,temp="/acc")
+        st="maintemp/"+session['userrole']+"_main.html"
+        if(session['userrole']=='admin'):
+            return render_template(st,temp="/acc")
+        else:
+            return render_template(st,temp="/fee_det")
+
     @app.route("/acc")
     def show_Acc():
-        st="maintemp/"+session['userrole']+"main.html"
+        st="maintemp/"+session['userrole']+"_main.html"
         return render_template("accounts/fee.html")
-    @app.route("/fee_det",methods=['POST'])
+    @app.route("/fee_det",methods=['POST','GET'])
     def feee_det(regno=''):
-        if(regno==''):
+        if(request.method)=='POST':
             regno=request.form['Registration_Number']
+        else:
+            regno=session['userid']
+
         sql="select course,branch,frname,lname from student where reg_no=%s;"
         val=(regno,)
         cur.execute(sql,val)
@@ -219,11 +306,11 @@ class adminplacement:
 
     @app.route("/eligible_stu")
     def eligible():
-        st="maintemp/admin_main.html"
+        st="maintemp/"+session['userrole']+"_main.html"
         return render_template(st,temp="/eligibleicon")
     @app.route("/eligibleicon")
     def eligiblemain():
-        st="maintemp/"+session['userrole']+"main.html"
+        st="maintemp/"+session['userrole']+"_main.html"
         sql="select name from company;"
         cur.execute(sql)
         es=cur.fetchall()
@@ -372,7 +459,7 @@ class rms:
         b=''
         if(a!=''):
             b=True
-        st="maintemp/"+session['userrole']+"main.html"
+        st="maintemp/"+session['userrole']+"_main.html"
         return render_template("result/rm.html",ab=a,b=b)
     @app.route("/rms",methods=['POST'])
     def show_rms():
@@ -427,18 +514,24 @@ class rms:
 class vrms:
     @app.route("/VResult")
     def vrsm():
-        st="maintemp/admin_main.html"
-        return render_template(st,temp="/vrsm")
+        st="maintemp/"+session['userrole']+"_main.html"
+        if(session['userrole']=='admin'):
+            return render_template(st,temp="/vrsm")
+        else:
+            return render_template(st,temp="/vrms")
     @app.route("/vrsm")
     def vshow_rsm(a=''):
         b=''
         if(a!=''):
             b=True
-        st="maintemp/"+session['userrole']+"main.html"
+        st="maintemp/"+session['userrole']+"_main.html"
         return render_template("result/vrm.html",ab=a,b=b)
-    @app.route("/vrms",methods=['POST'])
-    def vshow_rms():
-        regno=request.form['Registration_Number']
+    @app.route("/vrms",methods=['GET', 'POST'])
+    def vshow_rms(regno=""):
+        if(request.method)=='POST':
+            regno=request.form['Registration_Number']
+        else:
+            regno=session['userid']
         sql="select course,branch,frname,lname from student where reg_no=%s;"
         val=(regno,)
         cur.execute(sql,val)
@@ -484,6 +577,8 @@ class vrms:
         print(b,c)
         gg=len(b)
         return render_template("result/vrmrs.html",a=sem,r=regno,lenb=gg,b=b,c=c)
+
+    
 class Student:
     @app.route("/add_student")  
     def addStudent():
@@ -546,7 +641,7 @@ class Warden:
 class Accounts:
     @app.route("/add_accounts")  
     def addAccounts():
-        st="maintemp/admin_main.html"
+        st="maintemp/"+session['userrole']+"_main.html"
         return render_template(st,temp="/acc")
         
     @app.route("/acc")
@@ -703,6 +798,7 @@ class Library:
         return render_template('library/addstock.html')
 class add_sturoles:
     @app.route("/addsturole",methods=['POST'])
+
     def add_stu_role():
         f_n=request.form['f_n']
         l_n=request.form['l_n']
@@ -736,8 +832,8 @@ class add_sturoles:
         cur.execute(sql)
         id=cur.fetchall()
         userid=role+"@"+f_n+l_n+str(id[-1][0]+1)
-        sql="insert into parents(stuis,Fathername,father_occ,mothername,motherocc,mobno) values(%s,%s,%s,%s,%s,%s);"
-        val=(userid,fatn,focc,mname,mocc,fatnum)
+        sql="insert into parents(stuis,Fathername,father_occ,mothername,motherocc,mobno,passcode) values(%s,%s,%s,%s,%s,%s);"
+        val=(userid,fatn,focc,mname,mocc,fatnum,date)
         cur.execute(sql,val)
         conn.commit()
         name=f_n+l_n
@@ -762,7 +858,7 @@ class add_sturoles:
         cur.execute(sql,val)
         conn.commit()
         return Student.add_stu()
-
+        
 class add_roles:
     @app.route("/addnewrole",methods=['POST'])
     def add_role():
@@ -804,6 +900,7 @@ class add_roles:
 class view_notice:
     @app.route("/notice")
     def view_notice():
+        print("note")
         st="maintemp/"+session['userrole']+"_main.html"
         return render_template(st,temp="/shownotice")
     @app.route("/shownotice")
@@ -812,7 +909,7 @@ class view_notice:
         cur.execute(sql)
         data=cur.fetchall()
         print(data)
-        st="maintemp/"+session['userrole']+"main.html"
+        st="maintemp/"+session['userrole']+"_main.html"
         return render_template("notice/viewnotice.html",t=len(data),c=data)
 
 class addcourse:
@@ -883,7 +980,28 @@ class addcourse:
 class main():
     @app.route("/")
     def index():
-        return render_template('welcomescreen.html')
+        if('user' in session and session.get('userrole')=='admin'):
+            return render_template('maintemp/admin_main.html',user=session.get('user'),userrole=session.get('userrole'))
+        elif('user' in session and session.get('userrole')=='Accounts'):
+            return render_template('maintemp/Accounts_main.html',user=session.get('user'),userrole=session.get('userrole'))
+        elif('user' in session and session.get('userrole')=='Warden'):
+            return render_template('maintemp/Warden_main.html',user=session.get('user'),userrole=session.get('userrole'))
+        elif('user' in session and session.get('userrole')=='Transport'):
+            return render_template('maintemp/Transport_main.html',user=session.get('user'),userrole=session.get('userrole'))
+        elif('user' in session and session.get('userrole')=='Placement'):
+            return render_template('maintemp/Placement_main.html',user=session.get('user'),userrole=session.get('userrole'))
+        elif('user' in session and session.get('userrole')=='Library'):
+            return render_template('maintemp/Library_main.html',user=session.get('user'),userrole=session.get('userrole'))
+        elif('user' in session and session.get('userrole')=='Faculty'):
+            return render_template('maintemp/Faculty_main.html',user=session.get('user'),userrole=session.get('userrole'))
+        elif('user' in session and session.get('userrole')=='Parent'):
+            return render_template('maintemp/Parent_main.html',user=session.get('user'),userrole=session.get('userrole'))
+        elif('user' in session and session.get('userrole')=='Student'):
+            return render_template('maintemp/Student_main.html',user=session.get('user'),userrole=session.get('userrole'))
+
+        else:
+            return render_template('welcomescreen.html')
+        
     @app.route("/login")
     def login():
         return render_template('login.html',error="All Fields are Manodatry")

@@ -38,6 +38,9 @@
             margin-left: 35%;
             margin-top: 7.5%;
         }
+        td{
+          width: 20%;
+        }
 		
 
       </style>
@@ -47,66 +50,87 @@
 </div>
 
     <table class="table table-hover">
-        <thead>
-          <tr class="navcolor">
-            <th>Name</th>
-            <th style="color:white;">{{dataa[2]}}</th>
-            <th>Registration Number</th>
-            <th style="color:white;">{{dataa[3]}}</th>
-          </tr>
-          <tr class="navcolor">
-            <th>Course</th>
-            <th style="color:white;">{{dataa[0]}}</th>
-            <th>Branch</th>
-            <th style="color:white;">{{dataa[1]}}</th>
-          </tr>
-          <tr class="navcolor">
-            <th></th>
-            <th>Academic Fees</th>
-            <th>Hostel Fees</th>
-            <th>Transport Fees</th>
-            
-          </tr>
-        </thead>
         <tbody>
-         
-          <tr style="color:white;" class="navcolor">
-            <td style="color:#0f0c0c">Total Fees</td>
-            <td>{{cf}}</td>
-            <td>75000</td>
+          <tr>
             <td></td>
-          </tr>
-          <tr style="color:white;" class="navcolor">
-            <td style="color:#0f0c0c">Submitted Fees</th>
-            <td>{{a}}</th>
-            <td>{{h}}</td>
-            <td>{{t}}</td>
+            <td></td>
+            <td>
+              <b>PERSONAL INFORMATION</b></center>
+            </td>
+            <td></td>
+            <td></td>
             
           </tr>
+          {%for i in range(1,lenpi)%}
+          <center>
           <tr style="color:white;" class="navcolor">
-            <td style="color:#0f0c0c">Due Fees</th>
-            <td>{{cf-a}}</th>
-            <td>{{75000-h}}</td>
             <td></td>
-        </tr>
-        
-        <tr>
-          <td></td>
-          <td><input type="text" class="form-control" name="Registration_Number" id="exampleInputPassword1" placeholder="Registration Number" ></select></td>
-          <td><input type="text" class="form-control" name="Registration_Number" id="exampleInputPassword1" placeholder="Registration Number" ></select></td>
-          <td><input type="text" class="form-control" name="Registration_Number" id="exampleInputPassword1" placeholder="Registration Number" ></select></td>
-          
+            <td>{{pia[i]}}</td>
+            <td><center>:</center></td>
+            <td>{{pi[i]}}</td>
+            <td></td>
+            
           </tr>
-        <tr>
-          <td></td>
-          <td><Button></Button></td>
-          <td><Button></Button></td>
-          <td><Button></Button></td>
-          
-          </tr>
+        </center>
+{%endfor%}
           
         </tbody>
       </table>
+      <table class="table table-hover">
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>
+              <b>ACADEMICS INFORMATION</b></center>
+            </td>
+            <td></td>
+            <td></td>
+            
+          </tr>
+          {%for i in range(lenaia)%}
+          <center>
+          <tr style="color:white;" class="navcolor">
+            <td></td>
+            <td>{{aia[i]}}</td>
+            <td><center>:</center></td>
+            <td>{{ai[i]}}</td>
+            <td></td>
+            
+          </tr>
+        </center>
+{%endfor%}
+          
+        </tbody>
+      </table>
+      <table class="table table-hover">
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>
+              <b>PARENTS INFORMATION</b></center>
+            </td>
+            <td></td>
+            <td></td>
+            
+          </tr>
+          {%for i in range(lenpp)%}
+          <center>
+          <tr style="color:white;" class="navcolor">
+            <td></td>
+            <td>{{ppa[i]}}</td>
+            <td><center>:</center></td>
+            <td>{{pp[i]}}</td>
+            <td></td>
+            
+          </tr>
+        </center>
+{%endfor%}
+          
+        </tbody>
+      </table>
+      
       <script>
         window.onload = function() 
         {
@@ -120,6 +144,3 @@
     </script>
     </body>
     </html>
-
-
-    
